@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+@theme {
+  /* Type roles: Urbanist does all the work (text, headings, figures);
+     Caveat is the signature accent, used for five short phrases site-wide and never for UI. */
+  --font-sans: 'Urbanist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-accent: 'Caveat Variable', 'Segoe Print', cursive;
+
+  /* Touchbase brand — splash red, white and navy blue */
+  --color-ink: #0B1F4B;          /* navy — text, dark surfaces, wordmark on light */
+  --color-ink-2: #142C63;        /* lighter navy for hovers and layered cards */
+  --color-navy-deep: #071537;    /* deepest navy for overlays */
+  --color-navy-soft: #E8EEF9;    /* pale navy tint */
+  --color-red: #E10600;          /* logo red, nudged darker so white text passes contrast */
+  --color-red-2: #B80500;        /* hover / pressed */
+  --color-red-bright: #FF2A22;   /* accents on navy surfaces */
+  --color-red-soft: #FDECEB;
+  --color-mist: #F3F6FB;         /* light card surface, a whisper of blue */
+  --color-mist-2: #E6ECF6;
+  --color-line: #E1E7F1;
+  --color-muted: #5C6885;        /* navy-grey body copy */
+
+  --radius-card: 1.75rem;
+  --shadow-soft: 0 1px 2px rgb(11 31 75 / 0.04), 0 8px 24px -12px rgb(11 31 75 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(11 31 75 / 0.05), 0 24px 48px -20px rgb(11 31 75 / 0.25);
+
+  --animate-marquee: marquee 38s linear infinite;
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  --animate-ping-slow: ping-slow 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+  @keyframes ping-slow {
+    75%, 100% { transform: scale(2.4); opacity: 0; }
+  }
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: #fff;
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+::selection { background: var(--color-red); color: #fff; }
+
+/* Frosted glass tag used on image cards */
+.glass-tag {
+  background: linear-gradient(rgb(255 255 255 / 0.16), rgb(255 255 255 / 0.16)), rgb(11 31 75 / 0.2);
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.15);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid rgb(255 255 255 / 0.35);
+  color: #fff;
+}
+.glass-dark {
+  background: rgb(11 31 75 / 0.5);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgb(255 255 255 / 0.12);
+}
+
+.text-gradient-red {
+  background: linear-gradient(180deg, #FF4A3D 0%, #FF1A10 45%, #B80500 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+.num { font-variant-numeric: tabular-nums lining-nums; letter-spacing: -0.03em; }
+
+/* Accent phrases: Caveat has a small x-height, so it is set a size up and pulled tight */
+.accent { font-family: var(--font-accent); font-weight: 600; font-size: 1.18em; letter-spacing: -0.01em; line-height: 0.9; }
+
+/* ── Texture ───────────────────────────────────────────────────────
+   One pattern per surface type, kept at the edge of visibility and faded at the edges:
+   drafting grid on navy, dots on light grey, diagonal hatch on red.
+   Add the class to any positioned surface; the pattern sits behind its content. */
+.tex-grid, .tex-dots, .tex-hatch { position: relative; isolation: isolate; }
+.tex-grid::before, .tex-dots::before, .tex-hatch::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit;
+  -webkit-mask-image: radial-gradient(ellipse 85% 80% at 50% 45%, #000 35%, transparent 100%);
+  mask-image: radial-gradient(ellipse 85% 80% at 50% 45%, #000 35%, transparent 100%);
+}
+.tex-grid::before {
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+.tex-dots::before {
+  background-image: radial-gradient(rgb(11 31 75 / 0.12) 1.2px, transparent 1.6px);
+  background-size: 22px 22px;
+}
+.tex-hatch::before {
+  background-image: repeating-linear-gradient(135deg, rgb(255 255 255 / 0.09) 0 1px, transparent 1px 11px);
+}
+
+input[type='range'] { accent-color: var(--color-red); }
+
+/* Dual-thumb range: only the thumbs receive pointer events */
+.range-thumb::-webkit-slider-thumb {
+  pointer-events: auto;
+  -webkit-appearance: none;
+  height: 20px; width: 20px; border-radius: 999px;
+  background: #fff; border: 2px solid var(--color-red);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.15); cursor: grab;
+}
+.range-thumb::-moz-range-thumb {
+  pointer-events: auto;
+  height: 18px; width: 18px; border-radius: 999px;
+  background: #fff; border: 2px solid var(--color-red); cursor: grab;
+}
+.range-thumb::-webkit-slider-runnable-track { background: transparent; }
+
+@media print {
+  header, footer, .print\:hidden { display: none !important; }
+}
+
+/* ── Mobile ergonomics ─────────────────────────────────────────── */
+/* iOS Safari zooms into any field under 16px — keep form text at 16px on phones */
+@media (max-width: 767px) {
+  input:not([type='range']):not([type='checkbox']):not([type='radio']),
+  select,
+  textarea { font-size: 16px !important; }
+}
+.pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+html { -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; }
+button, a, [role='button'] { touch-action: manipulation; }
+
+/* Grid items default to min-width:auto, which lets long content push
+   a column wider than a phone screen. Let every grid cell shrink. */
+@layer base {
+  .grid > * { min-width: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee, .animate-ping-slow { animation: none; }
+}
